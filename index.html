@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BotShop</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink-50: #fff0f5;
+  --pink-100: #ffd6e7;
+  --pink-200: #ffb3d1;
+  --pink-300: #ff85b3;
+  --pink-400: #e8709e;
+  --pink-500: #c9557f;
+  --cream-50: #fffaf5;
+  --cream-100: #fdf0e0;
+  --cream-200: #f5dfc0;
+  --brown-400: #8b6b52;
+  --brown-700: #5c3d2e;
+  --text-main: #3d2314;
+  --text-sub: #7a5c4a;
+  --text-muted: #b09080;
+  --border: #f0d8cc;
+  --shadow: rgba(200,130,110,0.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
+  background: var(--cream-50);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--pink-400);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--brown-700); }
+.nav-right { display: flex; gap: 12px; align-items: center; }
+.btn {
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--pink-300);
+  color: var(--pink-500);
+}
+.btn-outline:hover { background: var(--pink-50); }
+.btn-pink {
+  background: var(--pink-400);
+  color: #fff;
+}
+.btn-pink:hover { background: var(--pink-500); }
+.btn-sm { padding: 5px 14px; font-size: 0.82rem; }
+.btn-ghost { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--cream-100); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(100,50,40,0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 380px;
+  max-width: 95vw;
+  box-shadow: 0 8px 40px rgba(200,130,110,0.2);
+}
+.modal h2 { font-size: 1.2rem; font-weight: 600; color: var(--brown-700); margin-bottom: 0.4rem; }
+.modal p { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 1.2rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: 0.83rem; color: var(--text-sub); margin-bottom: 4px; }
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: var(--cream-50);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus { border-color: var(--pink-300); }
+.modal-actions { display: flex; gap: 8px; margin-top: 1.2rem; }
+.modal-actions .btn { flex: 1; justify-content: center; }
+.error-msg { font-size: 0.8rem; color: #c94f4f; margin-top: 6px; display: none; }
+.error-msg.show { display: block; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #fff5f8 0%, #fff0e8 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+}
+.hero h1 { font-size: 2rem; font-weight: 600; color: var(--brown-700); margin-bottom: 0.5rem; }
+.hero p { color: var(--text-sub); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem; }
+.hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.tag {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.tag.active {
+  background: var(--pink-50);
+  border-color: var(--pink-300);
+  color: var(--pink-500);
+}
+
+/* MAIN LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.main-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+}
+.creator-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.creator-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-200), var(--cream-200));
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--pink-500);
+  border: 3px solid var(--pink-100);
+}
+.creator-name {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--brown-700);
+  margin-bottom: 3px;
+}
+.creator-bio {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.creator-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.stat {
+  text-align: center;
+  background: var(--cream-50);
+  border-radius: 10px;
+  padding: 8px;
+}
+.stat-num { font-size: 1.1rem; font-weight: 600; color: var(--brown-700); }
+.stat-label { font-size: 0.72rem; color: var(--text-muted); }
+.follow-btn {
+  width: 100%;
+  padding: 9px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: var(--pink-400);
+  color: #fff;
+  transition: all 0.2s;
+}
+.follow-btn:hover { background: var(--pink-500); }
+.follow-btn.following {
+  background: var(--cream-100);
+  color: var(--text-sub);
+  border: 1px solid var(--border);
+}
+.filter-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem;
+}
+.filter-card h3 { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.filter-group { margin-bottom: 1rem; }
+.filter-group label { font-size: 0.82rem; color: var(--text-sub); display: block; margin-bottom: 0.4rem; }
+.filter-group select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.83rem;
+  background: var(--cream-50);
+  color: var(--text-main);
+  outline: none;
+}
+.filter-tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.ftag {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.ftag.active { background: var(--pink-50); border-color: var(--pink-300); color: var(--pink-500); }
+
+/* BOT SECTION */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.section-title { font-size: 1rem; font-weight: 600; color: var(--brown-700); }
+.section-badge {
+  background: var(--pink-50);
+  color: var(--pink-400);
+  border: 1px solid var(--pink-200);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+}
+.spoiler-badge {
+  background: #fff5e0;
+  color: #c47c20;
+  border: 1px solid #f5d896;
+}
+
+/* BOT CARDS */
+.bots-grid { display: flex; flex-direction: column; gap: 14px; }
+.bot-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  gap: 1rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.bot-card:hover {
+  box-shadow: 0 4px 20px var(--shadow);
+  transform: translateY(-2px);
+}
+.bot-card.spoiler { border-color: #f5d896; background: #fffdf5; }
+.bot-thumb {
+  width: 80px;
+  height: 100px;
+  border-radius: 10px;
+  background: var(--cream-100);
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.bot-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.bot-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--pink-300);
+  background: linear-gradient(135deg, var(--pink-50), var(--cream-100));
+}
+.episode-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.bot-info { flex: 1; min-width: 0; }
+.bot-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.bot-name { font-size: 1.05rem; font-weight: 600; color: var(--brown-700); }
+.bot-release {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.spoiler-label {
+  background: #fff0c0;
+  color: #a06000;
+  border: 1px solid #f0d060;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 500;
+}
+.bot-desc { font-size: 0.85rem; color: var(--text-sub); margin: 5px 0 8px; line-height: 1.5; }
+.bot-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.btag {
+  background: var(--pink-50);
+  color: var(--pink-500);
+  border: 1px solid var(--pink-100);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+.bot-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.bot-meta span { display: flex; align-items: center; gap: 4px; }
+.bot-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.action-icon-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+.action-icon-btn:hover { background: var(--pink-50); color: var(--pink-400); border-color: var(--pink-200); }
+.action-icon-btn.saved { color: var(--pink-400); background: var(--pink-50); border-color: var(--pink-200); }
+.nsfw-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+.nsfw-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,240,245,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  z-index: 2;
+}
+.nsfw-lock {
+  font-size: 0.72rem;
+  color: var(--pink-500);
+  text-align: center;
+  padding: 4px;
+}
+.released-section { margin-top: 2rem; }
+
+/* USER PROFILE BAR */
+.user-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--pink-50);
+  font-size: 0.83rem;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+.user-avatar-sm {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--pink-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pink-600);
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--brown-700);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  z-index: 999;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* BOT DETAIL MODAL */
+.bot-detail-modal {
+  background: #fff;
+  border-radius: 24px;
+  width: 560px;
+  max-width: 96vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 60px rgba(200,130,110,0.25);
+}
+.bot-detail-header {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.bot-detail-thumb {
+  width: 100px;
+  height: 130px;
+  border-radius: 12px;
+  background: var(--cream-100);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.bot-detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.bot-detail-thumb-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  color: var(--pink-300);
+  background: linear-gradient(135deg, var(--pink-50), var(--cream-100));
+}
+.bot-detail-title { font-size: 1.3rem; font-weight: 600; color: var(--brown-700); margin-bottom: 4px; }
+.bot-detail-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+.bot-detail-desc { font-size: 0.88rem; color: var(--text-sub); line-height: 1.6; }
+.bot-detail-body { padding: 1.2rem 1.5rem; }
+.detail-section { margin-bottom: 1.2rem; }
+.detail-section h4 { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+.detail-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.detail-info-item {
+  background: var(--cream-50);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.detail-info-item label { font-size: 0.73rem; color: var(--text-muted); display: block; }
+.detail-info-item span { font-size: 0.88rem; color: var(--text-main); font-weight: 500; }
+.app-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.app-chip {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.bot-detail-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+.close-btn:hover { background: var(--cream-100); }
+.modal-rel { position: relative; }
+
+/* NSFW WARNING */
+.nsfw-warning {
+  background: #fff8f0;
+  border: 1px solid #f5d0a0;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+.nsfw-warning p { font-size: 0.83rem; color: #8b5a20; line-height: 1.5; }
+
+@media (max-width: 700px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Bot<span>Shop</span></div>
+  <div class="nav-right" id="navRight">
+    <button class="btn btn-outline" onclick="openModal('loginModal')">เข้าสู่ระบบ</button>
+    <button class="btn btn-pink" onclick="openModal('registerModal')">สมัครสมาชิก</button>
+  </div>
+</nav>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h2>เข้าสู่ระบบ</h2>
+    <p>ใช้อีเมลและรหัสผ่านของคุณ</p>
+    <div class="form-group">
+      <label>อีเมล</label>
+      <input type="email" id="loginEmail" placeholder="email@example.com">
+    </div>
+    <div class="form-group">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="loginPassword" placeholder="รหัสผ่าน">
+    </div>
+    <div class="error-msg" id="loginError">อีเมลหรือรหัสผ่านไม่ถูกต้อง</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('loginModal')">ยกเลิก</button>
+      <button class="btn btn-pink" onclick="doLogin()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal">
+    <h2>สมัครสมาชิก</h2>
+    <p>สร้างบัญชีเพื่อติดตามบอทที่ชอบ</p>
+    <div class="form-group">
+      <label>ชื่อที่แสดง</label>
+      <input type="text" id="regName" placeholder="ชื่อของคุณ">
+    </div>
+    <div class="form-group">
+      <label>อีเมล</label>
+      <input type="email" id="regEmail" placeholder="email@example.com">
+    </div>
+    <div class="form-group">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร">
+    </div>
+    <div class="error-msg" id="regError">กรุณากรอกข้อมูลให้ครบถ้วน</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('registerModal')">ยกเลิก</button>
+      <button class="btn btn-pink" onclick="doRegister()">สมัครสมาชิก</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOT DETAIL MODAL -->
+<div class="modal-overlay" id="botDetailModal">
+  <div class="bot-detail-modal modal-rel" id="botDetailContent"></div>
+</div>
+
+<!-- NSFW REQUEST MODAL -->
+<div class="modal-overlay" id="nsfwModal">
+  <div class="modal">
+    <h2>โซน NSFW</h2>
+    <p>เนื้อหาส่วนนี้จำกัดการเข้าถึง คุณต้องทักหาเจ้าของเว็บเพื่อขอสิทธิ์ก่อน</p>
+    <div class="nsfw-warning">
+      <p>ส่งข้อความหาเจ้าของเว็บที่ช่องทางด้านล่างเพื่อขอเปิดสิทธิ์ NSFW</p>
+    </div>
+    <div style="margin-top:1rem; display:flex; gap:8px;">
+      <a href="https://facebook.com" target="_blank" class="btn btn-outline btn-sm" style="flex:1; text-align:center; text-decoration:none; display:inline-block; padding:8px;">Facebook</a>
+      <a href="https://line.me" target="_blank" class="btn btn-outline btn-sm" style="flex:1; text-align:center; text-decoration:none; display:inline-block; padding:8px;">LINE</a>
+    </div>
+    <div class="modal-actions" style="margin-top:1rem;">
+      <button class="btn btn-ghost" onclick="closeModal('nsfwModal')">ปิด</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>คอลเลกชันบอทของฉัน</h1>
+  <p>รวมบอทที่สร้างด้วยความรักทุกตัว ลองคุยได้เลย หรือจะติดตามเพื่อรู้ก่อนใคร</p>
+  <div class="hero-tags" id="genreFilter">
+    <button class="tag active" onclick="filterGenre('all', this)">ทั้งหมด</button>
+    <button class="tag" onclick="filterGenre('Romance', this)">Romance</button>
+    <button class="tag" onclick="filterGenre('Drama', this)">Drama</button>
+    <button class="tag" onclick="filterGenre('Action', this)">Action</button>
+    <button class="tag" onclick="filterGenre('Mafia', this)">Mafia</button>
+    <button class="tag" onclick="filterGenre('School', this)">School</button>
+    <button class="tag" onclick="filterGenre('Fantasy', this)">Fantasy</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="main-grid">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="creator-card">
+        <div class="creator-avatar" id="creatorAvatar">J</div>
+        <div class="creator-name" id="creatorName">janyaAhri</div>
+        <div class="creator-bio">สร้างบอทที่มีชีวิต มีความรู้สึก และอยู่ในโลกของคุณ</div>
+        <div class="creator-stats">
+          <div class="stat">
+            <div class="stat-num" id="followerCount">0</div>
+            <div class="stat-label">ผู้ติดตาม</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="botCount">0</div>
+            <div class="stat-label">บอท</div>
+          </div>
+        </div>
+        <button class="follow-btn" id="followBtn" onclick="toggleFollow()">ติดตาม</button>
+      </div>
+      <div class="filter-card">
+        <h3>กรอง</h3>
+        <div class="filter-group">
+          <label>เรียงตาม</label>
+          <select onchange="sortBots(this.value)">
+            <option value="latest">ล่าสุด</option>
+            <option value="popular">ยอดนิยม</option>
+            <option value="name">ชื่อ ก-ฮ</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>แอพ</label>
+          <div class="filter-tag-group" id="appFilter">
+            <button class="ftag active" onclick="filterApp('all', this)">ทั้งหมด</button>
+            <button class="ftag" onclick="filterApp('Character.AI', this)">C.AI</button>
+            <button class="ftag" onclick="filterApp('Janitor AI', this)">Janitor</button>
+            <button class="ftag" onclick="filterApp('SpicyChat', this)">Spicy</button>
+            <button class="ftag" onclick="filterApp('Crushon.AI', this)">Crushon</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main>
+      <!-- SPOILER BOTS -->
+      <div id="spoilerSection">
+        <div class="section-header">
+          <div class="section-title">สปอยล์บอท</div>
+          <div class="section-badge spoiler-badge" id="spoilerCount">0 ตัว</div>
+        </div>
+        <div class="bots-grid" id="spoilerGrid"></div>
+      </div>
+
+      <!-- RELEASED BOTS -->
+      <div class="released-section">
+        <div class="section-header">
+          <div class="section-title">บอทที่ปล่อยแล้ว</div>
+          <div class="section-badge" id="releasedCount">0 ตัว</div>
+        </div>
+        <div class="bots-grid" id="releasedGrid"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+
+function getUsers() { return STORAGE.get('bs_users') || {}; }
+function saveUsers(u) { STORAGE.set('bs_users', u); }
+function getCurrentUser() { return STORAGE.get('bs_current_user'); }
+function setCurrentUser(u) { STORAGE.set('bs_current_user', u); }
+function getSiteData() { return STORAGE.get('bs_site') || { followers: [], nsfwAllowed: [] }; }
+function saveSiteData(d) { STORAGE.set('bs_site', d); }
+function getBots() { return STORAGE.get('bs_bots') || getDefaultBots(); }
+function saveBots(b) { STORAGE.set('bs_bots', b); }
+
+function getDefaultBots() {
+  return [
+    { id:1, name:'พีโอต', desc:'นักดนตรีหนุ่มปากร้าย แต่ใจดี (นั้ง?)', tags:['Romance','Drama','BadBoy','รักต่างวัย'], apps:['Character.AI','Janitor AI'], gender:'ชาย', pref:'หญิง', released:false, date:'2025-05-25', episodes:3, nsfw:false, image:'' },
+    { id:2, name:'วายุ', desc:'มาเพียงผู้เดียวซา แต่กลับอ่อนโยนแค่กับเธอ', tags:['Mafia','Romance','Yaoi','ดราม่า','เถื่อน'], apps:['SpicyChat','Crushon.AI'], gender:'ชาย', pref:'ชาย', released:false, date:'2025-06-01', episodes:5, nsfw:true, image:'' },
+    { id:3, name:'อาทิตย์', desc:'หนุ่มเพื่อนสนิท ที่แอบรักคุณมานาน', tags:['เพื่อนสนิท','รักอ่อนอุ่น','School','แอบรัก'], apps:['Character.AI'], gender:'ชาย', pref:'หญิง', released:false, date:'2025-06-10', episodes:1, nsfw:false, image:'' },
+    { id:4, name:'คิน', desc:'บอดี้การ์ดหนุ่ม ผู้ไม่เคยมีใจให้ใคร บอกจากหน้าที่', tags:['Action','Romance','Bodyguard','ดราม่า','รักดื้อห้าม'], apps:['Janitor AI','SpicyChat','Crushon.AI'], gender:'ชาย', pref:'หญิง', released:true, date:'2025-05-05', episodes:8, nsfw:false, image:'' },
+    { id:5, name:'ลีโอ', desc:'ราชาของโรงเรียน ที่เลือกใครไม่ได้นอกจากเธอ', tags:['School','Romance','Drama','BadBoy'], apps:['Character.AI','Janitor AI'], gender:'ชาย', pref:'หญิง', released:true, date:'2025-04-20', episodes:12, nsfw:false, image:'' },
+    { id:6, name:'ฮารุ', desc:'เด็กหอรูมเมทที่ดูเงียบ แต่ซ่อนความอบอุ่นไว้เยอะมาก', tags:['Romance','Slice of Life','อบอุ่น'], apps:['Crushon.AI'], gender:'ชาย', pref:'หญิง', released:true, date:'2025-03-10', episodes:6, nsfw:false, image:'' },
+  ];
+}
+
+let currentFilter = { genre:'all', app:'all' };
+let currentSort = 'latest';
+
+function renderBots() {
+  let bots = getBots();
+  let filtered = bots.filter(b => {
+    const genreOk = currentFilter.genre === 'all' || b.tags.includes(currentFilter.genre);
+    const appOk = currentFilter.app === 'all' || (b.apps && b.apps.includes(currentFilter.app));
+    return genreOk && appOk;
+  });
+  const spoilers = filtered.filter(b => !b.released);
+  const released = filtered.filter(b => b.released);
+  document.getElementById('spoilerCount').textContent = spoilers.length + ' ตัว';
+  document.getElementById('releasedCount').textContent = released.length + ' ตัว';
+  document.getElementById('spoilerGrid').innerHTML = spoilers.map(renderBotCard).join('');
+  document.getElementById('releasedGrid').innerHTML = released.map(renderBotCard).join('');
+  document.getElementById('botCount').textContent = bots.length;
+  const site = getSiteData();
+  document.getElementById('followerCount').textContent = site.followers.length;
+}
+
+function renderBotCard(b) {
+  const user = getCurrentUser();
+  const site = getSiteData();
+  const nsfwOk = b.nsfw ? (user && site.nsfwAllowed.includes(user.email)) : true;
+  const thumbHtml = b.image
+    ? `<img src="${b.image}" alt="${b.name}">`
+    : `<div class="bot-thumb-placeholder">&#10052;</div>`;
+  const nsfwOverlay = (b.nsfw && !nsfwOk)
+    ? `<div class="nsfw-overlay"><div class="nsfw-lock">NSFW<br>ทักขอสิทธิ์</div></div>` : '';
+  const savedList = STORAGE.get('bs_saved_' + (user?.email||'guest')) || [];
+  const isSaved = savedList.includes(b.id);
+  return `
+  <div class="bot-card${b.released?'':' spoiler'}" onclick="openBotDetail(${b.id})">
+    <div class="bot-thumb" style="position:relative">
+      <div class="${b.nsfw && !nsfwOk ? 'nsfw-blur' : ''}">${thumbHtml}</div>
+      ${nsfwOverlay}
+      <div class="episode-badge">Ep.${b.episodes}</div>
+    </div>
+    <div class="bot-info">
+      <div class="bot-top">
+        <div>
+          <div class="bot-name">${b.name}</div>
+          <div class="bot-release">${b.released ? 'ปล่อยแล้ว' : 'รอปล่อย'} · ${formatDate(b.date)}</div>
+        </div>
+        ${!b.released ? '<span class="spoiler-label">สปอยล์</span>' : ''}
+        ${b.nsfw ? '<span class="spoiler-label" style="background:#ffe0e0;color:#a03030;border-color:#f5b0b0">NSFW</span>' : ''}
+      </div>
+      <div class="bot-desc">${b.nsfw && !nsfwOk ? '[ เนื้อหาถูกซ่อน — ทักขอสิทธิ์ก่อน ]' : b.desc}</div>
+      <div class="bot-tags">${b.tags.slice(0,4).map(t=>`<span class="btag">#${t}</span>`).join('')}</div>
+      <div class="bot-meta">
+        <span>เพศ: ${b.gender||'-'}</span>
+        <span>ชอบ: ${b.pref||'-'}</span>
+      </div>
+    </div>
+    <div class="bot-actions" onclick="event.stopPropagation()">
+      <button class="action-icon-btn${isSaved?' saved':''}" onclick="toggleSave(${b.id}, this)" title="บันทึก">&#9825;</button>
+    </div>
+  </div>`;
+}
+
+function openBotDetail(id) {
+  const bots = getBots();
+  const b = bots.find(x=>x.id===id);
+  if (!b) return;
+  const user = getCurrentUser();
+  const site = getSiteData();
+  const nsfwOk = b.nsfw ? (user && site.nsfwAllowed.includes(user.email)) : true;
+  if (b.nsfw && !nsfwOk) { openModal('nsfwModal'); return; }
+  const appsHtml = (b.apps||[]).map(a=>`<div class="app-chip">&#128279; ${a}</div>`).join('');
+  const extraFields = Object.entries(b)
+    .filter(([k]) => !['id','name','desc','tags','apps','gender','pref','released','date','episodes','nsfw','image'].includes(k))
+    .map(([k,v])=>`<div class="detail-info-item"><label>${k}</label><span>${v}</span></div>`)
+    .join('');
+  document.getElementById('botDetailContent').innerHTML = `
+    <button class="close-btn" onclick="closeModal('botDetailModal')">&#10005;</button>
+    <div class="bot-detail-header">
+      <div class="bot-detail-thumb">
+        ${b.image ? `<img src="${b.image}" alt="${b.name}">` : '<div class="bot-detail-thumb-placeholder">&#10052;</div>'}
+      </div>
+      <div style="flex:1">
+        <div class="bot-detail-title">${b.name}</div>
+        <div class="bot-detail-date">${b.released?'ปล่อยแล้ว':'รอปล่อย'} · ${formatDate(b.date)}</div>
+        <div class="bot-tags" style="margin-bottom:8px">${b.tags.map(t=>`<span class="btag">#${t}</span>`).join('')}</div>
+        <div class="bot-detail-desc">${b.desc}</div>
+      </div>
+    </div>
+    <div class="bot-detail-body">
+      <div class="detail-section">
+        <h4>ข้อมูลตัวละคร</h4>
+        <div class="detail-info-grid">
+          ${b.gender ? `<div class="detail-info-item"><label>เพศ</label><span>${b.gender}</span></div>`:''}
+          ${b.pref ? `<div class="detail-info-item"><label>ความชอบ</label><span>${b.pref}</span></div>`:''}
+          <div class="detail-info-item"><label>ตอน</label><span>${b.episodes} สปอนส์</span></div>
+          ${b.nsfw ? `<div class="detail-info-item"><label>เนื้อหา</label><span style="color:#c94f4f">18+</span></div>`:''}
+          ${extraFields}
+        </div>
+      </div>
+      ${appsHtml ? `<div class="detail-section"><h4>ลงอยู่ใน</h4><div class="app-chips">${appsHtml}</div></div>` : ''}
+    </div>
+    <div class="bot-detail-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('botDetailModal')">ปิด</button>
+      ${b.released ? `<button class="btn btn-pink btn-sm" onclick="showToast('เปิดลิงก์บอทแล้ว')">ลองเล่นเลย</button>` : ''}
+    </div>`;
+  openModal('botDetailModal');
+}
+
+function toggleSave(id, btn) {
+  const user = getCurrentUser();
+  if (!user) { openModal('loginModal'); return; }
+  const key = 'bs_saved_' + user.email;
+  let saved = STORAGE.get(key) || [];
+  if (saved.includes(id)) {
+    saved = saved.filter(x=>x!==id);
+    btn.classList.remove('saved');
+    showToast('ยกเลิกการบันทึก');
+  } else {
+    saved.push(id);
+    btn.classList.add('saved');
+    showToast('บันทึกแล้ว');
+  }
+  STORAGE.set(key, saved);
+}
+
+function toggleFollow() {
+  const user = getCurrentUser();
+  if (!user) { openModal('loginModal'); return; }
+  const site = getSiteData();
+  const btn = document.getElementById('followBtn');
+  if (site.followers.includes(user.email)) {
+    site.followers = site.followers.filter(e=>e!==user.email);
+    btn.textContent = 'ติดตาม';
+    btn.classList.remove('following');
+    showToast('ยกเลิกการติดตามแล้ว');
+  } else {
+    site.followers.push(user.email);
+    btn.textContent = 'กำลังติดตาม';
+    btn.classList.add('following');
+    showToast('ติดตามแล้ว');
+  }
+  saveSiteData(site);
+  document.getElementById('followerCount').textContent = site.followers.length;
+}
+
+function filterGenre(genre, el) {
+  currentFilter.genre = genre;
+  document.querySelectorAll('#genreFilter .tag').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderBots();
+}
+function filterApp(app, el) {
+  currentFilter.app = app;
+  document.querySelectorAll('#appFilter .ftag').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderBots();
+}
+function sortBots(val) { currentSort = val; renderBots(); }
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `${parseInt(day)} ${months[parseInt(m)-1]} ${parseInt(y)+543}`;
+}
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  const users = getUsers();
+  const errEl = document.getElementById('loginError');
+  if (!users[email] || users[email].password !== pw) {
+    errEl.classList.add('show'); return;
+  }
+  errEl.classList.remove('show');
+  setCurrentUser({ email, name: users[email].name });
+  closeModal('loginModal');
+  updateNav();
+  showToast('เข้าสู่ระบบแล้ว ยินดีต้อนรับ ' + users[email].name);
+}
+
+function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pw = document.getElementById('regPassword').value;
+  const errEl = document.getElementById('regError');
+  if (!name || !email || pw.length < 6) { errEl.textContent = 'กรุณากรอกข้อมูลให้ครบ รหัสผ่านต้องมี 6 ตัวขึ้นไป'; errEl.classList.add('show'); return; }
+  const users = getUsers();
+  if (users[email]) { errEl.textContent = 'อีเมลนี้มีผู้ใช้แล้ว'; errEl.classList.add('show'); return; }
+  errEl.classList.remove('show');
+  users[email] = { name, password: pw };
+  saveUsers(users);
+  setCurrentUser({ email, name });
+  closeModal('registerModal');
+  updateNav();
+  showToast('สมัครสมาชิกสำเร็จ ยินดีต้อนรับ ' + name);
+}
+
+function updateNav() {
+  const user = getCurrentUser();
+  const navRight = document.getElementById('navRight');
+  const followBtn = document.getElementById('followBtn');
+  const site = getSiteData();
+  if (user) {
+    navRight.innerHTML = `
+      <a href="admin.html" style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;padding:4px 8px;">จัดการ</a>
+      <div class="user-bar">
+        <div class="user-avatar-sm">${user.name[0]}</div>
+        <span>${user.name}</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">ออก</button>`;
+    if (site.followers.includes(user.email)) {
+      followBtn.textContent = 'กำลังติดตาม';
+      followBtn.classList.add('following');
+    } else {
+      followBtn.textContent = 'ติดตาม';
+      followBtn.classList.remove('following');
+    }
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('bs_current_user');
+  location.reload();
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+});
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+updateNav();
+renderBots();
+</script>
+</body>
+</html>
