@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>janyaAhri </title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf7ff;
+  --bg2: #f3eeff;
+  --surface: #ffffff;
+  --surface2: #f8f4ff;
+  --surface3: #ede5ff;
+  --accent: #b388ff;
+  --accent2: #ce93d8;
+  --accent3: #7c4dff;
+  --accent-light: #e1bee7;
+  --accent-dark: #7e57c2;
+  --pink: #f48fb1;
+  --pink-light: #fce4ec;
+  --red-pastel: #ffb3c1;
+  --green-pastel: #b2dfdb;
+  --gold: #ffe082;
+  --text: #3d2b5e;
+  --text2: #7b5ea7;
+  --text3: #b39ddb;
+  --border: #e1d5f5;
+  --border2: #d1b8f0;
+  --shadow: 0 4px 24px #b388ff22;
+  --shadow2: 0 8px 32px #b388ff33;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --font: 'Mitr', 'Noto Sans Thai', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--accent-light); border-radius: 3px; }
+
+/* BG DECO */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 90% 5%, #e1bee755, transparent),
+    radial-gradient(ellipse 40% 40% at 5% 90%, #f8bbd055, transparent),
+    radial-gradient(ellipse 50% 60% at 50% 50%, #ede5ff33, transparent);
+}
+
+/* Sparkle deco elements */
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 0;
+  font-size: 1.2rem; opacity: 0.15; animation: float 6s ease-in-out infinite;
+}
+.sparkle:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+.sparkle:nth-child(2) { top: 30%; right: 8%; animation-delay: 2s; }
+.sparkle:nth-child(3) { top: 70%; left: 3%; animation-delay: 4s; }
+.sparkle:nth-child(4) { top: 80%; right: 5%; animation-delay: 1s; }
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(10deg); }
+}
+
+#app { position: relative; z-index: 1; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/*  NAV  */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: #ffffffcc;
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid var(--border);
+  padding: 0;
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; gap: 6px; min-height: 56px; flex-wrap: wrap;
+  padding-top: 6px; padding-bottom: 6px;
+}
+.nav-brand {
+  font-family: var(--font); font-weight: 600; font-size: 1.15rem;
+  color: var(--accent3); letter-spacing: 0.03em;
+  margin-right: 12px; cursor: pointer; white-space: nowrap;
+}
+.nav-brand span { color: var(--pink); }
+.nav-btn {
+  padding: 6px 15px;
+  border: 2px solid var(--border2);
+  background: var(--surface);
+  color: var(--text2);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--font); font-size: 0.82rem; font-weight: 400;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.nav-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent3); }
+.nav-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+
+/*  PROFILE  */
+.profile-wrap {
+  max-width: 1100px; margin: 0 auto; padding: 40px 20px 28px;
+}
+.profile-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  display: flex; align-items: center; gap: 28px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow2);
+  position: relative; overflow: hidden;
+}
+.profile-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--pink), var(--accent2));
+}
+.profile-avatar-area { flex-shrink: 0; text-align: center; }
+.profile-avatar {
+  width: 110px; height: 110px; border-radius: 50%;
+  border: 4px solid var(--accent-light);
+  object-fit: cover; background: var(--surface3);
+  box-shadow: 0 0 0 4px var(--bg2), 0 8px 24px #b388ff33;
+  transition: transform 0.3s;
+  display: block;
+}
+.profile-avatar:hover { transform: scale(1.04); }
+.avatar-edit-btn {
+  margin-top: 8px;
+  background: var(--accent-light); border: 2px solid var(--border2);
+  color: var(--accent3); border-radius: 12px;
+  padding: 4px 10px; font-size: 0.72rem; cursor: pointer;
+  font-family: var(--font);
+}
+.avatar-edit-btn:hover { background: var(--accent); color: #fff; }
+.profile-info { flex: 1; min-width: 220px; }
+.profile-name { font-size: 1.9rem; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.2; }
+.profile-name em { font-style: normal; color: var(--accent3); }
+.profile-bio { font-size: 0.88rem; color: var(--text2); line-height: 1.7; margin-bottom: 14px; }
+.profile-links { display: flex; flex-wrap: wrap; gap: 7px; }
+.plink {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 14px;
+  border: 2px solid var(--border2);
+  background: var(--surface2);
+  color: var(--accent3); font-size: 0.8rem;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.18s; font-family: var(--font);
+}
+.plink:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/*  PAGE  */
+.page { display: none; padding: 12px 0 60px; }
+.page.active { display: block; }
+
+/*  SECTION HEADER  */
+.sec-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
+  padding: 0 0 16px; border-bottom: 2px solid var(--border);
+}
+.sec-title { font-size: 1.3rem; font-weight: 600; color: var(--text); }
+.sec-title span { color: var(--accent3); }
+.sec-subtitle { font-size: 0.82rem; color: var(--text3); }
+.btn-add {
+  margin-left: auto;
+  padding: 8px 18px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none; cursor: pointer;
+  font-family: var(--font); font-size: 0.82rem; font-weight: 500;
+  box-shadow: 0 4px 12px #b388ff33; transition: all 0.18s;
+}
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px #b388ff44; }
+
+/*  SEARCH / FILTER BAR  */
+.filter-bar {
+  display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.search-box {
+  flex: 1; min-width: 180px;
+  padding: 9px 14px; border-radius: 12px;
+  border: 2px solid var(--border); background: var(--surface);
+  font-family: var(--font); font-size: 0.85rem; color: var(--text);
+  outline: none;
+}
+.search-box:focus { border-color: var(--accent); }
+.sort-sel {
+  padding: 9px 12px; border-radius: 12px;
+  border: 2px solid var(--border); background: var(--surface);
+  font-family: var(--font); font-size: 0.82rem; color: var(--text2);
+  cursor: pointer; outline: none;
+}
+.sort-sel:focus { border-color: var(--accent); }
+
+/* TAG FILTER */
+.tag-filter-wrap {
+  margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.tag-filter-label { font-size: 0.78rem; color: var(--text3); margin-right: 4px; }
+.tag-chip {
+  padding: 4px 11px; border-radius: 10px;
+  border: 2px solid var(--border2); background: var(--surface);
+  color: var(--text2); font-size: 0.75rem; cursor: pointer;
+  font-family: var(--font); transition: all 0.15s;
+}
+.tag-chip.active { background: var(--accent3); border-color: var(--accent3); color: #fff; }
+.tag-chip:hover:not(.active) { background: var(--accent-light); }
+
+/*  GRID  */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+/*  BOT CARD  */
+.bot-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: all 0.25s;
+  position: relative; display: flex; flex-direction: column;
+}
+.bot-card:hover { transform: translateY(-4px); box-shadow: var(--shadow2); border-color: var(--accent-light); }
+
+.card-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 10;
+  padding: 3px 9px; border-radius: 8px; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.badge-released { background: #c8f7c5; color: #2e7d32; border: 1px solid #a5d6a7; }
+.badge-spoiler { background: #ffe0b2; color: #e65100; border: 1px solid #ffcc80; }
+.badge-updated { background: var(--red-pastel); color: #c62828; border: 1px solid #ef9a9a; }
+
+.fav-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 10;
+  background: #ffffffcc; border: none; width: 30px; height: 30px;
+  border-radius: 50%; cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px #0002; transition: transform 0.15s;
+}
+.fav-btn:hover { transform: scale(1.15); }
+
+.card-img {
+  width: 100%; height: 180px; object-fit: cover;
+  background: linear-gradient(135deg, var(--surface3), var(--bg2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; color: var(--text3); flex-shrink: 0;
+}
+.card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.card-name { font-size: 1rem; font-weight: 600; color: var(--text); }
+.card-meta {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.card-meta-item {
+  font-size: 0.72rem; color: var(--text2);
+  background: var(--surface2); padding: 2px 7px; border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.card-pov {
+  font-size: 0.72rem; font-weight: 500;
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+}
+.pov-male { background: #bbdefb; color: #1565c0; }
+.pov-female { background: #fce4ec; color: #880e4f; }
+.pov-any { background: var(--surface3); color: var(--accent3); }
+
+.card-plot { font-size: 0.8rem; color: var(--text2); line-height: 1.5; flex: 1; }
+.card-quote {
+  font-size: 0.78rem; color: var(--text3); font-style: italic;
+  border-left: 3px solid var(--accent-light); padding-left: 8px;
+}
+.card-date { font-size: 0.72rem; color: var(--text3); }
+.card-update-bar {
+  background: #ffe0e6; border-top: 2px solid var(--red-pastel);
+  padding: 6px 12px; font-size: 0.72rem; color: #c62828;
+  display: flex; align-items: center; gap: 6px;
+}
+.update-label { font-weight: 700; letter-spacing: 0.05em; }
+
+/* card links */
+.card-links { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 10px; }
+.card-link-btn {
+  padding: 4px 10px; border-radius: 8px; font-size: 0.72rem;
+  border: 2px solid var(--border2); background: var(--surface2);
+  color: var(--accent3); text-decoration: none; cursor: pointer;
+  transition: all 0.15s; font-family: var(--font);
+}
+.card-link-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* card actions */
+.card-actions { display: flex; gap: 6px; padding: 0 14px 14px; }
+.btn-view {
+  flex: 1; padding: 7px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none; cursor: pointer;
+  font-family: var(--font); font-size: 0.78rem;
+  transition: all 0.15s;
+}
+.btn-view:hover { opacity: 0.88; }
+.btn-edit {
+  padding: 7px 12px; border-radius: 10px;
+  background: var(--surface2); border: 2px solid var(--border2);
+  color: var(--text2); cursor: pointer; font-size: 0.78rem; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-edit:hover { background: var(--gold); border-color: var(--gold); color: #7c5e00; }
+.btn-del {
+  padding: 7px 10px; border-radius: 10px;
+  background: var(--surface2); border: 2px solid var(--border2);
+  color: var(--text2); cursor: pointer; font-size: 0.78rem; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-del:hover { background: var(--red-pastel); border-color: var(--red-pastel); color: #c62828; }
+
+/*  SPOILER countdown  */
+.spoiler-countdown {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border: 2px solid #ffcc80; border-radius: 10px;
+  padding: 8px 12px; margin: 0 14px 10px;
+  font-size: 0.78rem; color: #e65100; text-align: center;
+  font-weight: 500;
+}
+
+/*  FULL DETAIL MODAL  */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: #3d2b5e88; backdrop-filter: blur(6px);
+  align-items: flex-start; justify-content: center;
+  padding: 20px; overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); max-width: 700px; width: 100%;
+  box-shadow: 0 20px 60px #b388ff33; animation: slideUp 0.25s ease;
+  margin: auto;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-head {
+  padding: 20px 20px 16px; border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.modal-head h2 { font-size: 1.2rem; color: var(--text); flex: 1; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  color: var(--text2); cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: var(--red-pastel); color: #c62828; }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.modal-img {
+  width: 100%; max-height: 300px; object-fit: cover;
+  border-radius: var(--radius-sm); background: var(--surface3);
+  display: flex; align-items: center; justify-content: center; font-size: 4rem;
+}
+.modal-img img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
+.detail-section h3 {
+  font-size: 0.8rem; font-weight: 600; color: var(--accent3);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.detail-section p {
+  font-size: 0.87rem; color: var(--text2); line-height: 1.7;
+  white-space: pre-wrap;
+}
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag-pill {
+  padding: 3px 9px; border-radius: 8px;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--text2); font-size: 0.73rem;
+}
+
+/*  TENSOR PAGE  */
+.tensor-profile {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  margin-bottom: 28px; text-align: center;
+  box-shadow: var(--shadow);
+}
+.tensor-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 3px solid var(--accent-light); object-fit: cover;
+  background: var(--surface3); margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+}
+.tensor-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.tensor-name { font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.tensor-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 20px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; text-decoration: none; font-size: 0.85rem;
+  font-family: var(--font); transition: all 0.18s;
+}
+.tensor-link-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+/* Tensor sub-tabs */
+.sub-tabs {
+  display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap;
+}
+.sub-tab {
+  padding: 7px 18px; border-radius: 14px;
+  border: 2px solid var(--border2); background: var(--surface);
+  color: var(--text2); cursor: pointer; font-family: var(--font);
+  font-size: 0.83rem; transition: all 0.18s;
+}
+.sub-tab:hover { background: var(--accent-light); }
+.sub-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+
+.tensor-sub-page { display: none; }
+.tensor-sub-page.active { display: block; }
+
+/* LoRa / Remex Card */
+.lora-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: all 0.25s;
+}
+.lora-card:hover { transform: translateY(-4px); box-shadow: var(--shadow2); }
+.lora-cover {
+  width: 100%; height: 160px; object-fit: cover;
+  background: linear-gradient(135deg, var(--surface3), var(--bg2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; color: var(--text3); position: relative; overflow: hidden;
+}
+.lora-cover img { width: 100%; height: 100%; object-fit: cover; }
+.lora-body { padding: 14px; }
+.lora-name { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.lora-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.5; margin-bottom: 10px; }
+
+/* Gallery slider */
+.gallery-slider {
+  position: relative; overflow: hidden; border-radius: 10px;
+  margin-bottom: 10px; background: var(--surface3);
+}
+.gallery-inner {
+  display: flex; transition: transform 0.3s ease;
+}
+.gallery-img {
+  min-width: 100%; height: 200px; object-fit: cover; flex-shrink: 0;
+}
+.gallery-img img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: #ffffffcc; border: none; width: 28px; height: 28px;
+  border-radius: 50%; cursor: pointer; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px #0002; z-index: 5;
+}
+.gallery-btn.prev { left: 6px; }
+.gallery-btn.next { right: 6px; }
+.gallery-dots {
+  display: flex; justify-content: center; gap: 4px; padding: 6px 0;
+}
+.gallery-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border2); cursor: pointer; transition: all 0.15s;
+}
+.gallery-dot.active { background: var(--accent); width: 14px; border-radius: 3px; }
+
+/* Copy box */
+.copy-box {
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 10px; margin-bottom: 7px; overflow: hidden;
+}
+.copy-box-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px; background: var(--surface3); border-bottom: 1px solid var(--border);
+}
+.copy-box-title { font-size: 0.72rem; font-weight: 600; color: var(--text2); }
+.copy-btn {
+  padding: 3px 10px; border-radius: 6px; font-size: 0.7rem;
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  font-family: var(--font); transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--accent3); }
+.copy-btn.copied { background: var(--green-pastel); color: #2e7d32; }
+.copy-text {
+  padding: 8px 10px; font-size: 0.77rem; color: var(--text2);
+  font-family: var(--mono); white-space: pre-wrap; line-height: 1.5;
+}
+
+/* Prompt card */
+.prompt-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: all 0.25s;
+}
+.prompt-card:hover { transform: translateY(-4px); box-shadow: var(--shadow2); }
+.prompt-img {
+  width: 100%; height: 200px; object-fit: cover;
+  background: var(--surface3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; color: var(--text3);
+}
+.prompt-img img { width: 100%; height: 100%; object-fit: cover; }
+.prompt-body { padding: 14px; }
+.prompt-name { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.prompt-text-box {
+  cursor: pointer;
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 10px; padding: 10px;
+  font-family: var(--mono); font-size: 0.78rem; color: var(--text2);
+  line-height: 1.5; white-space: pre-wrap;
+  transition: all 0.18s; position: relative;
+}
+.prompt-text-box:hover { border-color: var(--accent); background: var(--surface3); }
+.prompt-copy-hint {
+  position: absolute; bottom: 6px; right: 8px;
+  font-size: 0.68rem; color: var(--text3); font-family: var(--font);
+}
+.prompt-copied {
+  display: none; position: absolute; inset: 0;
+  background: #c8f7c5cc; border-radius: 8px;
+  align-items: center; justify-content: center;
+  font-size: 0.85rem; color: #2e7d32; font-weight: 600;
+}
+.prompt-text-box:hover .prompt-copied { display: flex; }
+
+/*  MODALS / FORMS  */
+.modal-form { display: flex; flex-direction: column; gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 0.78rem; font-weight: 500; color: var(--text2); }
+.form-input, .form-textarea, .form-select {
+  padding: 9px 12px; border-radius: 10px;
+  border: 2px solid var(--border); background: var(--surface2);
+  font-family: var(--font); font-size: 0.85rem; color: var(--text);
+  outline: none; transition: border-color 0.15s;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.form-section-title {
+  font-size: 0.78rem; font-weight: 600; color: var(--accent3);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding-top: 4px; border-top: 1px solid var(--border);
+}
+.dynamic-list { display: flex; flex-direction: column; gap: 6px; }
+.dynamic-item { display: flex; gap: 6px; align-items: center; }
+.dynamic-item input { flex: 1; }
+.btn-add-item {
+  padding: 5px 12px; border-radius: 8px; font-size: 0.75rem;
+  background: var(--surface3); border: 2px dashed var(--border2);
+  color: var(--text2); cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-add-item:hover { border-color: var(--accent); color: var(--accent3); }
+.btn-remove-item {
+  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
+  background: var(--surface2); border: 2px solid var(--border);
+  color: var(--text3); cursor: pointer; font-size: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-remove-item:hover { background: var(--red-pastel); color: #c62828; }
+.modal-footer {
+  padding: 16px 20px; border-top: 2px solid var(--border);
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.btn-save {
+  padding: 9px 22px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none; cursor: pointer;
+  font-family: var(--font); font-size: 0.85rem; font-weight: 500;
+  box-shadow: 0 4px 12px #b388ff33; transition: all 0.18s;
+}
+.btn-save:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-cancel {
+  padding: 9px 18px; border-radius: 12px;
+  background: var(--surface2); border: 2px solid var(--border2);
+  color: var(--text2); cursor: pointer; font-family: var(--font); font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.btn-cancel:hover { background: var(--surface3); }
+
+/* PIN MODAL */
+.pin-modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 600;
+  background: #3d2b5e88; backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+}
+.pin-modal-overlay.open { display: flex; }
+.pin-box {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 28px 24px; max-width: 340px; width: 90%;
+  text-align: center; box-shadow: var(--shadow2);
+}
+.pin-icon { font-size: 2rem; margin-bottom: 10px; }
+.pin-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.pin-sub { font-size: 0.8rem; color: var(--text3); margin-bottom: 16px; }
+.pin-input {
+  width: 100%; padding: 10px 14px; border-radius: 12px;
+  border: 2px solid var(--border); background: var(--surface2);
+  font-family: var(--font); font-size: 1rem; color: var(--text);
+  text-align: center; letter-spacing: 0.15em; outline: none; margin-bottom: 10px;
+}
+.pin-input:focus { border-color: var(--accent); }
+.pin-error { font-size: 0.78rem; color: #c62828; margin-bottom: 10px; display: none; }
+.pin-btns { display: flex; gap: 8px; justify-content: center; }
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--text3);
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state p { font-size: 0.88rem; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+  z-index: 1000; background: var(--text); color: var(--bg); padding: 10px 22px;
+  border-radius: 14px; font-size: 0.85rem; opacity: 0;
+  transition: all 0.25s; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/*  RESPONSIVE  */
+@media (max-width: 600px) {
+  .profile-card { flex-direction: column; align-items: flex-start; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+  .nav-inner { gap: 4px; }
+  .nav-btn { padding: 5px 10px; font-size: 0.78rem; }
+}
+@media (max-width: 400px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+
+/*  STAR DECO  */
+.star-deco {
+  display: inline-block; color: var(--accent); margin: 0 4px;
+  animation: twinkle 2s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* SYNC STATUS */
+.sync-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.sync-loading { background: var(--accent); animation: pulse 1s infinite; }
+.sync-saving { background: var(--gold); animation: pulse 0.7s infinite; }
+.sync-done { background: #81c784; }
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+</style></head>
+<body>
+
+<div id="app">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand" onclick="scrollToTop()">janya<span>Ahri</span></div>
+    <button class="nav-btn active" onclick="showPage('bots')">Bots</button>
+    <div id="syncStatus" style="display:none;align-items:center;gap:5px;font-size:0.72rem;color:var(--text3);margin-left:auto;padding:4px 10px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);"></div>
+    <button class="nav-btn" onclick="showPage('spoiler')">Spoiler</button>
+    <button class="nav-btn" onclick="showPage('tensor')">Tensor</button>
+    <button class="nav-btn" onclick="showPage('favs')">Favorite</button></div></nav>
+
+<!-- PROFILE -->
+<div class="profile-wrap" id="profileWrap">
+  <div class="profile-card">
+    <div class="profile-avatar-area">
+      <img class="profile-avatar" id="profileAvatar" src="" alt="avatar" onerror="this.style.display='none'" style="display:none">
+      <div id="profileAvatarPlaceholder" style="width:110px;height:110px;border-radius:50%;border:4px solid var(--accent-light);background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:2.8rem;box-shadow:0 0 0 4px var(--bg2),0 8px 24px #b388ff33;cursor:pointer;" onclick="editProfile()"></div>
+      <button class="avatar-edit-btn" onclick="editProfile()"> แก้ไข</button>
+    </div>
+    <div class="profile-info">
+      <div class="profile-name" id="profileName">janya<em>Ahri</em> </div>
+      <div class="profile-bio" id="profileBio"> สร้างบอทตัวละครและงาน AI art <br>สวัสดีนะคะทุกคน ~ ยินดีต้อนรับสู่โลกของ janyaAhri </div>
+      <div class="profile-links" id="profileLinks"></div>
+    </div></div></div>
+
+<!--  BOTS PAGE  -->
+<div class="page active" id="page-bots">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title"><span>Bots</span></div>
+        <div class="sec-subtitle">บอทที่ปล่อยแล้ว</div>
+      </div>
+      <div class="section-actions" style="margin-left:auto;display:flex;gap:8px;">
+        <button class="btn-add" onclick="requirePin(()=>openBotForm())">+ เพิ่มบอท</button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <input class="search-box" id="botSearch" placeholder=" ค้นหาบอท..." oninput="renderBots()">
+      <select class="sort-sel" id="botSort" onchange="renderBots()">
+        <option value="newest">ใหม่ล่าสุด</option>
+        <option value="oldest">เก่าสุด</option>
+        <option value="updated">อัปเดทล่าสุด</option>
+      </select>
+    </div>
+    <div class="tag-filter-wrap" id="botTagFilter">
+      <span class="tag-filter-label">แท็ก:</span>
+    </div>
+    <div class="cards-grid" id="botsGrid"></div></div></div>
+
+<!--  SPOILER PAGE  -->
+<div class="page" id="page-spoiler">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title"><span>Spoiler Bots</span></div>
+        <div class="sec-subtitle">บอทที่ยังไม่ปล่อย</div>
+      </div>
+      <div style="margin-left:auto;">
+        <button class="btn-add" onclick="requirePin(()=>openBotForm('spoiler'))">+ เพิ่ม Spoiler</button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <input class="search-box" id="spoilerSearch" placeholder=" ค้นหา..." oninput="renderSpoilers()">
+    </div>
+    <div class="cards-grid" id="spoilerGrid"></div></div></div>
+
+<!--  TENSOR PAGE  -->
+<div class="page" id="page-tensor">
+  <div class="container">
+    <div class="tensor-profile" id="tensorProfileCard">
+      <div id="tensorAvatarWrap">
+        <div class="tensor-avatar" id="tensorAvatarPlaceholder" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--accent-light);background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text3);margin:0 auto 12px;">AI</div>
+      </div>
+      <div class="tensor-name" id="tensorName">janyaAhri</div>
+      <div style="margin-bottom:12px;font-size:0.82rem;color:var(--text3);" id="tensorBio"></div>
+      <a class="tensor-link-btn" href="https://tensor.art/u/851206632221181088" target="_blank">ดูโปรไฟล์ Tensor ของฉัน
+      </a>
+      <div style="margin-top:10px;">
+        <button style="background:none;border:none;cursor:pointer;font-size:0.75rem;color:var(--text3);" onclick="requirePin(()=>openTensorProfileEdit())"> แก้ไขโปรไฟล์ Tensor</button>
+      </div>
+    </div>
+    <div class="sub-tabs"><button class="sub-tab active" onclick="showTensorTab('lora')">LoRa</button>
+      <button class="sub-tab" onclick="showTensorTab('remex')">Remex</button>
+      <button class="sub-tab" onclick="showTensorTab('prompt')">Prompt</button>
+    </div>
+    <!-- LoRa -->
+    <div class="tensor-sub-page active" id="tensorTab-lora">
+      <div class="sec-head" style="margin-bottom:16px;">
+        <div class="sec-title" style="font-size:1rem;">LoRa</div>
+        <button class="btn-add" style="margin-left:auto;" onclick="requirePin(()=>openLoraForm('lora'))">+ เพิ่ม</button>
+      </div>
+      <div class="cards-grid" id="loraGrid"></div>
+    </div>
+    <!-- Remex -->
+    <div class="tensor-sub-page" id="tensorTab-remex">
+      <div class="sec-head" style="margin-bottom:16px;">
+        <div class="sec-title" style="font-size:1rem;">Remex</div>
+        <button class="btn-add" style="margin-left:auto;" onclick="requirePin(()=>openLoraForm('remex'))">+ เพิ่ม</button>
+      </div>
+      <div class="cards-grid" id="remexGrid"></div>
+    </div>
+    <!-- Prompt -->
+    <div class="tensor-sub-page" id="tensorTab-prompt">
+      <div class="sec-head" style="margin-bottom:16px;">
+        <div class="sec-title" style="font-size:1rem;">Prompt</div>
+        <button class="btn-add" style="margin-left:auto;" onclick="requirePin(()=>openPromptForm())">+ เพิ่ม</button>
+      </div>
+      <div class="cards-grid" id="promptGrid"></div>
+    </div></div></div>
+
+<!--  FAVORITES PAGE  -->
+<div class="page" id="page-favs">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-title"><span>Favorite</span></div>
+    </div>
+    <div class="cards-grid" id="favsGrid"></div></div></div>
+
+<!--  BOT DETAIL MODAL  -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-box" style="max-width:740px;">
+    <div class="modal-head">
+      <h2 id="detailTitle">รายละเอียดบอท</h2>
+      <button class="modal-close" onclick="closeModal('detailModal')"></button>
+    </div>
+    <div class="modal-body" id="detailBody"></div></div></div>
+
+<!--  BOT FORM MODAL  -->
+<div class="modal-overlay" id="botFormModal">
+  <div class="modal-box" style="max-width:680px;">
+    <div class="modal-head">
+      <h2 id="botFormTitle">เพิ่มบอท</h2>
+      <button class="modal-close" onclick="closeModal('botFormModal')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form" id="botFormFields">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ชื่อบอท *</label>
+            <input class="form-input" id="bf-name" placeholder="ชื่อบอท">
+          </div>
+          <div class="form-group">
+            <label class="form-label">รูปปกบอท (URL)</label>
+            <input class="form-input" id="bf-img" placeholder="https://...">
+          </div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label">เพศ</label>
+            <select class="form-select" id="bf-gender">
+              <option value="">เลือก</option>
+              <option>ชาย</option>
+              <option>หญิง</option>
+              <option>ไม่ระบุ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">อายุ</label>
+            <input class="form-input" id="bf-age" placeholder="อายุ">
+          </div>
+          <div class="form-group">
+            <label class="form-label">POV</label>
+            <select class="form-select" id="bf-pov">
+              <option value="">เลือก</option>
+              <option value="male">Male POV</option>
+              <option value="female">Female POV</option>
+              <option value="any">Any POV</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">พล็อตสั้น</label>
+          <textarea class="form-textarea" id="bf-plot" placeholder="พล็อตสั้น..." style="min-height:60px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">พล็อตเต็ม</label>
+          <textarea class="form-textarea" id="bf-fullplot" placeholder="พล็อตเต็ม..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Lore</label>
+            <textarea class="form-textarea" id="bf-lore" placeholder="Lore..." style="min-height:60px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Personality</label>
+            <textarea class="form-textarea" id="bf-personality" placeholder="Personality..." style="min-height:60px;"></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Greeting</label>
+            <textarea class="form-textarea" id="bf-greeting" placeholder="คำทักทาย..." style="min-height:60px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ประโยคเด็ด / Quote</label>
+            <input class="form-input" id="bf-quote" placeholder="ประโยคเด็ด...">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">วันที่ปล่อย</label>
+            <input class="form-input" id="bf-date" type="date">
+          </div>
+          <div class="form-group" id="bf-releasedate-wrap" style="display:none;">
+            <label class="form-label">วันกำหนดปล่อย</label>
+            <input class="form-input" id="bf-releasedate" type="date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">สถานะ</label>
+            <select class="form-select" id="bf-status" onchange="toggleReleaseDateField()">
+              <option value="released">Released</option>
+              <option value="spoiler">Spoiler</option>
+              <option value="updated">Updated</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="bf-updatedetail-wrap" style="display:none;">
+          <label class="form-label">รายละเอียดอัปเดท</label>
+          <input class="form-input" id="bf-updatedetail" placeholder="รายละเอียดการอัปเดท...">
+        </div>
+
+        <div class="form-section-title"> แท็ก</div>
+        <div class="form-group">
+          <label class="form-label">แท็ก (คั่นด้วยจุลภาค , )</label>
+          <input class="form-input" id="bf-tags" placeholder="anime, female, semireal ...">
+        </div>
+
+        <div class="form-section-title"> ลิงก์ (สูงสุด 10)</div>
+        <div class="dynamic-list" id="bf-links-list"></div>
+        <button class="btn-add-item" onclick="addLinkField('bf-links-list',10)">+ เพิ่มลิงก์</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('botFormModal')">ยกเลิก</button>
+      <button class="btn-save" onclick="saveBot()">บันทึก</button>
+    </div></div></div>
+
+<!--  LORA FORM MODAL  -->
+<div class="modal-overlay" id="loraFormModal">
+  <div class="modal-box" style="max-width:680px;">
+    <div class="modal-head">
+      <h2 id="loraFormTitle">เพิ่ม LoRa</h2>
+      <button class="modal-close" onclick="closeModal('loraFormModal')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ชื่อ *</label>
+            <input class="form-input" id="lf-name" placeholder="ชื่อ LoRa">
+          </div>
+          <div class="form-group">
+            <label class="form-label">แท็ก (คั่น , )</label>
+            <input class="form-input" id="lf-tags" placeholder="anime, female ...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">รายละเอียด</label>
+          <textarea class="form-textarea" id="lf-desc" placeholder="รายละเอียด..."></textarea>
+        </div>
+        <div class="form-section-title"> แกลเลอรี่ภาพ (URL, สูงสุด 10)</div>
+        <div class="dynamic-list" id="lf-images-list"></div>
+        <button class="btn-add-item" onclick="addSingleField('lf-images-list',10,'URL รูปภาพ')">+ เพิ่มรูป</button>
+
+        <div class="form-section-title"> ช่องข้อความ Copy (เพิ่มได้ไม่จำกัด)</div>
+        <div class="dynamic-list" id="lf-copyboxes-list"></div>
+        <button class="btn-add-item" onclick="addCopyBoxField()">+ เพิ่มช่อง Copy</button>
+
+        <div class="form-section-title"> ลิงก์ (สูงสุด 5)</div>
+        <div class="dynamic-list" id="lf-links-list"></div>
+        <button class="btn-add-item" onclick="addLinkField('lf-links-list',5)">+ เพิ่มลิงก์</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('loraFormModal')">ยกเลิก</button>
+      <button class="btn-save" onclick="saveLora()">บันทึก</button>
+    </div></div></div>
+
+<!--  PROMPT FORM MODAL  -->
+<div class="modal-overlay" id="promptFormModal">
+  <div class="modal-box" style="max-width:520px;">
+    <div class="modal-head">
+      <h2 id="promptFormTitle">เพิ่ม Prompt</h2>
+      <button class="modal-close" onclick="closeModal('promptFormModal')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form">
+        <div class="form-group">
+          <label class="form-label">ชื่อ *</label>
+          <input class="form-input" id="pf-name" placeholder="ชื่อ Prompt">
+        </div>
+        <div class="form-group">
+          <label class="form-label">รูปภาพ (URL)</label>
+          <input class="form-input" id="pf-img" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">แท็ก (คั่น , )</label>
+          <input class="form-input" id="pf-tags" placeholder="anime, style ...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prompt (กดที่การ์ดเพื่อคัดลอก)</label>
+          <textarea class="form-textarea" id="pf-prompt" placeholder="prompt ที่นี่..." style="min-height:100px;font-family:var(--mono);font-size:0.8rem;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('promptFormModal')">ยกเลิก</button>
+      <button class="btn-save" onclick="savePrompt()">บันทึก</button>
+    </div></div></div>
+
+<!--  PROFILE EDIT MODAL  -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-head">
+      <h2>แก้ไขโปรไฟล์</h2>
+      <button class="modal-close" onclick="closeModal('profileModal')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form">
+        <div class="form-group">
+          <label class="form-label">รูปโปรไฟล์ (URL)</label>
+          <input class="form-input" id="pe-avatar" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ชื่อ</label>
+          <input class="form-input" id="pe-name" placeholder="ชื่อ">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bio / แคปชั่น</label>
+          <textarea class="form-textarea" id="pe-bio"></textarea>
+        </div>
+        <div class="form-section-title"> Social Links</div>
+        <div class="dynamic-list" id="pe-links-list"></div>
+        <button class="btn-add-item" onclick="addLinkField('pe-links-list',10)">+ เพิ่มลิงก์</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('profileModal')">ยกเลิก</button>
+      <button class="btn-save" onclick="saveProfile()">บันทึก</button>
+    </div></div></div>
+
+<!--  TENSOR PROFILE EDIT  -->
+<div class="modal-overlay" id="tensorProfileModal">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-head">
+      <h2>แก้ไขโปรไฟล์ Tensor</h2>
+      <button class="modal-close" onclick="closeModal('tensorProfileModal')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-form">
+        <div class="form-group">
+          <label class="form-label">รูปโปรไฟล์ Tensor (URL)</label>
+          <input class="form-input" id="tp-avatar" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ชื่อ</label>
+          <input class="form-input" id="tp-name" value="janyaAhri">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea class="form-textarea" id="tp-bio" placeholder="bio สั้น ๆ"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('tensorProfileModal')">ยกเลิก</button>
+      <button class="btn-save" onclick="saveTensorProfile()">บันทึก</button>
+    </div></div></div>
+
+<!--  PIN MODAL  -->
+<div class="pin-modal-overlay" id="pinModal">
+  <div class="pin-box">
+    <div class="pin-icon" style="font-size:1.5rem;color:var(--accent);">ล็อก</div>
+    <div class="pin-title">ใส่รหัสผ่าน</div>
+    <div class="pin-sub">กรุณากรอกรหัสเพื่อดำเนินการ</div>
+    <input class="pin-input" id="pinInput" type="password" placeholder="--------" maxlength="20" onkeydown="if(event.key==='Enter')checkPin()">
+    <div class="pin-error" id="pinError"> รหัสผ่านไม่ถูกต้อง</div>
+    <div class="pin-btns">
+      <button class="btn-cancel" onclick="closePin()">ยกเลิก</button>
+      <button class="btn-save" onclick="checkPin()">ยืนยัน</button>
+    </div></div></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!--  SCRIPT  -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/*
+========================================================
+🔥 FIREBASE SETUP
+========================================================
+
+1. ไปที่ https://console.firebase.google.com
+2. Create Project
+3. Build → Firestore Database → Create Database
+4. Start in test mode
+5. Project Settings → Your apps → Web App
+6. เอาค่า config มาใส่ด้านล่าง
+
+========================================================
+*/
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBbWdDAbf6PdO8xyGHmg7JTmY7WRfDL1uM",
+  authDomain: "nexabot-app-71ea6.firebaseapp.com",
+  projectId: "nexabot-app-71ea6",
+  storageBucket: "nexabot-app-71ea6.firebasestorage.app",
+  messagingSenderId: "906718243372",
+  appId: "1:906718243372:web:365e47d9dbfdd198eb3f89"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.firebaseDB = db;
+window.firebaseDoc = doc;
+window.firebaseGetDoc = getDoc;
+window.firebaseSetDoc = setDoc;
+</script>
+
+<script>
+
+const PIN = '100150';
+
+
+// ====== FIREBASE CLOUD SYNC ======
+
+const LS = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
+};
+
+let _saving = false;
+let _saveQueue = false;
+
+async function cloudLoad() {
+  showSyncStatus('loading');
+
+  try {
+    const db = window.firebaseDB;
+    const ref = window.firebaseDoc(db, "janyaAhri", "main");
+    const snap = await window.firebaseGetDoc(ref);
+
+    if (snap.exists()) {
+      applyCloudData(snap.data());
+    } else {
+      const defaultData = {
+        bots: [],
+        lora: [],
+        remex: [],
+        prompts: [],
+        profile: {
+          avatar:'',
+          name:'janyaAhri',
+          bio:'สร้างบอทตัวละครและงาน AI art',
+          links:[]
+        },
+        tensor: {
+          avatar:'',
+          name:'janyaAhri',
+          bio:''
+        }
+      };
+
+      await window.firebaseSetDoc(ref, defaultData);
+      applyCloudData(defaultData);
+    }
+
+    hideSyncStatus();
+
+  } catch (e) {
+
+    console.error(e);
+
+    applyCloudData({
+      bots: LS.get('ja_bots') || [],
+      lora: LS.get('ja_lora') || [],
+      remex: LS.get('ja_remex') || [],
+      prompts: LS.get('ja_prompts') || [],
+      profile: LS.get('ja_profile') || {
+        avatar:'',
+        name:'janyaAhri',
+        bio:'',
+        links:[]
+      },
+      tensor: LS.get('ja_tensor') || {
+        avatar:'',
+        name:'janyaAhri',
+        bio:''
+      }
+    });
+
+    hideSyncStatus();
+
+    showToast('⚠️ Firebase ยังไม่เชื่อม ใช้ LocalStorage แทน');
+  }
+}
+
+function applyCloudData(d) {
+  bots = d.bots || [];
+  loraItems = d.lora || [];
+  remexItems = d.remex || [];
+  promptItems = d.prompts || [];
+
+  profile = d.profile || {
+    avatar:'',
+    name:'janyaAhri',
+    bio:'',
+    links:[]
+  };
+
+  tensorProfile = d.tensor || {
+    avatar:'',
+    name:'janyaAhri',
+    bio:''
+  };
+
+  LS.set('ja_bots', bots);
+  LS.set('ja_lora', loraItems);
+  LS.set('ja_remex', remexItems);
+  LS.set('ja_prompts', promptItems);
+  LS.set('ja_profile', profile);
+  LS.set('ja_tensor', tensorProfile);
+
+  renderAll();
+}
+
+async function cloudSave() {
+
+  if (_saving) {
+    _saveQueue = true;
+    return;
+  }
+
+  _saving = true;
+
+  showSyncStatus('saving');
+
+  LS.set('ja_bots', bots);
+  LS.set('ja_lora', loraItems);
+  LS.set('ja_remex', remexItems);
+  LS.set('ja_prompts', promptItems);
+  LS.set('ja_profile', profile);
+  LS.set('ja_tensor', tensorProfile);
+
+  try {
+
+    const db = window.firebaseDB;
+    const ref = window.firebaseDoc(db, "janyaAhri", "main");
+
+    await window.firebaseSetDoc(ref, {
+      bots,
+      lora: loraItems,
+      remex: remexItems,
+      prompts: promptItems,
+      profile,
+      tensor: tensorProfile
+    });
+
+    hideSyncStatus();
+
+  } catch (e) {
+
+    console.error(e);
+
+    hideSyncStatus();
+
+    showToast('⚠️ บันทึก Firebase ไม่สำเร็จ');
+  }
+
+  _saving = false;
+
+  if (_saveQueue) {
+    _saveQueue = false;
+    cloudSave();
+  }
+}
+
+function showSyncStatus(type) {
+
+  const el = document.getElementById('syncStatus');
+
+  if (!el) return;
+
+  el.style.display = 'flex';
+
+  el.innerHTML = type === 'loading'
+    ? '<span class="sync-dot sync-loading"></span> กำลังโหลด...'
+    : '<span class="sync-dot sync-saving"></span> กำลังบันทึก...';
+}
+
+function hideSyncStatus() {
+
+  const el = document.getElementById('syncStatus');
+
+  if (!el) return;
+
+  el.innerHTML = '<span class="sync-dot sync-done"></span> ซิงค์แล้ว ✓';
+
+  setTimeout(() => {
+    el.style.display = 'none';
+  }, 2000);
+}
+
+// Data
+
+let bots = [];
+let loraItems = [];
+let remexItems = [];
+let promptItems = [];
+let favorites = LS.get('ja_favs') || [];
+let profile = { avatar:'', name:'janyaAhri', bio:' สร้างบอทตัวละครและงาน AI art \nสวัสดีนะคะทุกคน ~ ยินดีต้อนรับสู่โลกของ janyaAhri ', links:[] };
+let tensorProfile = { avatar:'', name:'janyaAhri', bio:'' };
+let activeBotTags = [];
+let currentEditId = null;
+let currentLoraType = 'lora';
+let currentLoraId = null;
+let currentPromptId = null;
+
+//  PIN 
+let pinCallback = null;
+function requirePin(cb) {
+  pinCallback = cb;
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModal').classList.add('open');
+  setTimeout(()=>document.getElementById('pinInput').focus(),100);
+}
+function checkPin() {
+  if(document.getElementById('pinInput').value === PIN) {
+    closePin();
+    if(pinCallback) pinCallback();
+  } else {
+    document.getElementById('pinError').style.display = 'block';
+    document.getElementById('pinInput').value = '';
+  }
+}
+function closePin() {
+  document.getElementById('pinModal').classList.remove('open');
+}
+
+//  TOAST 
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+//  MODALS 
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+
+//  NAV 
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(p==='bots') renderBots();
+  if(p==='spoiler') renderSpoilers();
+  if(p==='tensor') { renderLora(); renderRemex(); renderPrompts(); }
+  if(p==='favs') renderFavs();
+}
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+
+//  PROFILE 
+function renderProfile() {
+  const av = document.getElementById('profileAvatar');
+  const ph = document.getElementById('profileAvatarPlaceholder');
+  if(profile.avatar) {
+    av.src = profile.avatar; av.style.display = 'block'; ph.style.display = 'none';
+  } else {
+    av.style.display = 'none'; ph.style.display = 'flex';
+  }
+  document.getElementById('profileName').innerHTML = profile.name.replace('Ahri','<em>Ahri</em>') + ' ';
+  document.getElementById('profileBio').innerHTML = (profile.bio||'').replace(/\n/g,'<br>');
+  const linksEl = document.getElementById('profileLinks');
+  linksEl.innerHTML = '';
+  (profile.links||[]).forEach(l=>{
+    if(!l.label && !l.url) return;
+    const a = document.createElement('a');
+    a.className = 'plink'; a.href = l.url||'#'; a.target='_blank';
+    a.textContent = ' '+(l.label||l.url);
+    linksEl.appendChild(a);
+  });
+}
+function editProfile() {
+  document.getElementById('pe-avatar').value = profile.avatar||'';
+  document.getElementById('pe-name').value = profile.name||'';
+  document.getElementById('pe-bio').value = profile.bio||'';
+  const list = document.getElementById('pe-links-list');
+  list.innerHTML = '';
+  (profile.links||[]).forEach(l=>addLinkField('pe-links-list',10,l));
+  openModal('profileModal');
+}
+function saveProfile() {
+  profile.avatar = document.getElementById('pe-avatar').value.trim();
+  profile.name = document.getElementById('pe-name').value.trim()||'janyaAhri';
+  profile.bio = document.getElementById('pe-bio').value.trim();
+  profile.links = readLinkFields('pe-links-list');
+  renderProfile();
+  closeModal('profileModal');
+  cloudSave();
+  showToast(' บันทึกโปรไฟล์แล้ว');
+}
+
+//  TENSOR PROFILE 
+function renderTensorProfile() {
+  const ap = document.getElementById('tensorAvatarPlaceholder');
+  if(tensorProfile.avatar) ap.innerHTML = `<img src="${tensorProfile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  document.getElementById('tensorName').textContent = tensorProfile.name||'janyaAhri';
+  document.getElementById('tensorBio').textContent = tensorProfile.bio||'';
+}
+function openTensorProfileEdit() {
+  document.getElementById('tp-avatar').value = tensorProfile.avatar||'';
+  document.getElementById('tp-name').value = tensorProfile.name||'janyaAhri';
+  document.getElementById('tp-bio').value = tensorProfile.bio||'';
+  openModal('tensorProfileModal');
+}
+function saveTensorProfile() {
+  tensorProfile.avatar = document.getElementById('tp-avatar').value.trim();
+  tensorProfile.name = document.getElementById('tp-name').value.trim()||'janyaAhri';
+  tensorProfile.bio = document.getElementById('tp-bio').value.trim();
+  renderTensorProfile();
+  closeModal('tensorProfileModal');
+  cloudSave();
+  showToast(' บันทึกโปรไฟล์ Tensor แล้ว');
+}
+
+//  TENSOR TABS 
+function showTensorTab(tab) {
+  document.querySelectorAll('.tensor-sub-page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.sub-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tensorTab-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+//  HELPERS: LINK FIELDS 
+function addLinkField(listId, max, existing) {
+  const list = document.getElementById(listId);
+  if(list.children.length >= max) { showToast('ถึงจำนวนสูงสุดแล้ว'); return; }
+  const div = document.createElement('div');
+  div.className = 'dynamic-item';
+  div.innerHTML = `<input class="form-input" placeholder="ชื่อ (เช่น Doki Chat)" value="${existing?.label||''}">
+    <input class="form-input" placeholder="URL https://..." value="${existing?.url||''}" style="flex:2;">
+    <button class="btn-remove-item" onclick="this.parentElement.remove()"></button>`;
+  list.appendChild(div);
+}
+function readLinkFields(listId) {
+  const items = [];
+  document.querySelectorAll(`#${listId} .dynamic-item`).forEach(row=>{
+    const inputs = row.querySelectorAll('input');
+    const label = inputs[0]?.value?.trim();
+    const url = inputs[1]?.value?.trim();
+    if(label||url) items.push({label,url});
+  });
+  return items;
+}
+
+//  HELPERS: SINGLE FIELD LIST 
+function addSingleField(listId, max, placeholder) {
+  const list = document.getElementById(listId);
+  if(list.children.length >= max) { showToast('ถึงจำนวนสูงสุดแล้ว'); return; }
+  const div = document.createElement('div');
+  div.className = 'dynamic-item';
+  div.innerHTML = `<input class="form-input" placeholder="${placeholder}">
+    <button class="btn-remove-item" onclick="this.parentElement.remove()"></button>`;
+  list.appendChild(div);
+}
+function readSingleFields(listId) {
+  const vals = [];
+  document.querySelectorAll(`#${listId} .dynamic-item input`).forEach(i=>{
+    if(i.value.trim()) vals.push(i.value.trim());
+  });
+  return vals;
+}
+
+//  HELPERS: COPY BOX FIELDS 
+function addCopyBoxField(existing) {
+  const list = document.getElementById('lf-copyboxes-list');
+  const div = document.createElement('div');
+  div.style.cssText = 'background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;';
+  div.innerHTML = `<div style="display:flex;gap:6px;align-items:center;">
+    <input class="form-input" placeholder="หัวข้อ (เช่น negative prompt)" value="${existing?.title||''}" style="flex:1;">
+    <button class="btn-remove-item" onclick="this.closest('.dynamic-item')?.remove()||this.closest('div').remove()"></button></div>
+  <textarea class="form-textarea" placeholder="เนื้อหา Prompt..." style="min-height:60px;font-family:var(--mono);font-size:0.8rem;">${existing?.text||''}</textarea>`;
+  list.appendChild(div);
+}
+function readCopyBoxFields() {
+  const boxes = [];
+  document.querySelectorAll('#lf-copyboxes-list > div').forEach(row=>{
+    const title = row.querySelector('input')?.value?.trim();
+    const text = row.querySelector('textarea')?.value?.trim();
+    if(title||text) boxes.push({title,text});
+  });
+  return boxes;
+}
+
+//  BOT TAGS 
+function getAllBotTags() {
+  const tags = new Set();
+  [...bots].forEach(b=>(b.tags||[]).forEach(t=>tags.add(t)));
+  return [...tags];
+}
+function renderTagFilter() {
+  const wrap = document.getElementById('botTagFilter');
+  wrap.innerHTML = '<span class="tag-filter-label">แท็ก (AND):</span>';
+  getAllBotTags().forEach(tag=>{
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip' + (activeBotTags.includes(tag)?' active':'');
+    chip.textContent = tag;
+    chip.onclick = ()=>{
+      if(activeBotTags.includes(tag)) activeBotTags = activeBotTags.filter(t=>t!==tag);
+      else activeBotTags.push(tag);
+      renderTagFilter(); renderBots();
+    };
+    wrap.appendChild(chip);
+  });
+}
+
+//  STATUS TOGGLE 
+function toggleReleaseDateField() {
+  const s = document.getElementById('bf-status').value;
+  document.getElementById('bf-releasedate-wrap').style.display = s==='spoiler' ? 'flex' : 'none';
+  document.getElementById('bf-updatedetail-wrap').style.display = s==='updated' ? 'block' : 'none';
+}
+
+//  BOT FORM 
+function openBotForm(mode, id) {
+  currentEditId = id||null;
+  document.getElementById('bf-status').value = mode==='spoiler' ? 'spoiler' : 'released';
+  toggleReleaseDateField();
+  if(id) {
+    const b = bots.find(x=>x.id===id);
+    if(!b) return;
+    document.getElementById('botFormTitle').textContent = ' แก้ไขบอท';
+    document.getElementById('bf-name').value = b.name||'';
+    document.getElementById('bf-img').value = b.img||'';
+    document.getElementById('bf-gender').value = b.gender||'';
+    document.getElementById('bf-age').value = b.age||'';
+    document.getElementById('bf-pov').value = b.pov||'';
+    document.getElementById('bf-plot').value = b.plot||'';
+    document.getElementById('bf-fullplot').value = b.fullplot||'';
+    document.getElementById('bf-lore').value = b.lore||'';
+    document.getElementById('bf-personality').value = b.personality||'';
+    document.getElementById('bf-greeting').value = b.greeting||'';
+    document.getElementById('bf-quote').value = b.quote||'';
+    document.getElementById('bf-date').value = b.date||'';
+    document.getElementById('bf-status').value = b.status||'released';
+    document.getElementById('bf-releasedate').value = b.releasedate||'';
+    document.getElementById('bf-updatedetail').value = b.updatedetail||'';
+    document.getElementById('bf-tags').value = (b.tags||[]).join(', ');
+    toggleReleaseDateField();
+    const ll = document.getElementById('bf-links-list'); ll.innerHTML='';
+    (b.links||[]).forEach(l=>addLinkField('bf-links-list',10,l));
+  } else {
+    document.getElementById('botFormTitle').textContent = mode==='spoiler' ? ' เพิ่ม Spoiler Bot' : ' เพิ่มบอท';
+    ['bf-name','bf-img','bf-gender','bf-age','bf-pov','bf-plot','bf-fullplot','bf-lore','bf-personality','bf-greeting','bf-quote','bf-date','bf-releasedate','bf-updatedetail','bf-tags'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('bf-links-list').innerHTML='';
+  }
+  openModal('botFormModal');
+}
+function saveBot() {
+  const name = document.getElementById('bf-name').value.trim();
+  if(!name) { showToast(' กรุณาใส่ชื่อบอท'); return; }
+  const status = document.getElementById('bf-status').value;
+  const data = {
+    id: currentEditId || Date.now().toString(),
+    name, img: document.getElementById('bf-img').value.trim(),
+    gender: document.getElementById('bf-gender').value,
+    age: document.getElementById('bf-age').value.trim(),
+    pov: document.getElementById('bf-pov').value,
+    plot: document.getElementById('bf-plot').value.trim(),
+    fullplot: document.getElementById('bf-fullplot').value.trim(),
+    lore: document.getElementById('bf-lore').value.trim(),
+    personality: document.getElementById('bf-personality').value.trim(),
+    greeting: document.getElementById('bf-greeting').value.trim(),
+    quote: document.getElementById('bf-quote').value.trim(),
+    date: document.getElementById('bf-date').value,
+    releasedate: document.getElementById('bf-releasedate').value,
+    updatedetail: document.getElementById('bf-updatedetail').value.trim(),
+    status,
+    tags: document.getElementById('bf-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    links: readLinkFields('bf-links-list'),
+    updatedAt: Date.now(),
+    createdAt: currentEditId ? (bots.find(x=>x.id===currentEditId)?.createdAt||Date.now()) : Date.now()
+  };
+  if(currentEditId) bots = bots.map(b=>b.id===currentEditId?data:b);
+  else bots.push(data);
+  closeModal('botFormModal');
+  renderTagFilter(); renderBots(); renderSpoilers();
+  cloudSave();
+  showToast(' บันทึกบอทแล้ว');
+}
+function deleteBot(id) {
+  if(!confirm('ลบบอทนี้?')) return;
+  bots = bots.filter(b=>b.id!==id);
+  renderBots(); renderSpoilers(); renderTagFilter();
+  cloudSave();
+  showToast(' ลบแล้ว');
+}
+
+//  RENDER BOTS 
+function sortBots(arr) {
+  const s = document.getElementById('botSort')?.value||'newest';
+  return [...arr].sort((a,b)=>{
+    if(s==='newest') return b.createdAt-a.createdAt;
+    if(s==='oldest') return a.createdAt-b.createdAt;
+    if(s==='updated') return b.updatedAt-a.updatedAt;
+    return 0;
+  });
+}
+function renderBots() {
+  const q = (document.getElementById('botSearch')?.value||'').toLowerCase();
+  let data = bots.filter(b=>b.status!=='spoiler');
+  if(q) data = data.filter(b=>(b.name+' '+(b.plot||'')+(b.tags||[]).join(' ')).toLowerCase().includes(q));
+  if(activeBotTags.length>0) data = data.filter(b=>activeBotTags.every(t=>(b.tags||[]).includes(t)));
+  data = sortBots(data);
+  renderTagFilter();
+  const grid = document.getElementById('botsGrid');
+  if(!data.length) { grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มีบอทเลย ~ เพิ่มบอทแรกได้เลย!</p></div>`; return; }
+  grid.innerHTML = data.map(b=>botCardHTML(b)).join('');
+}
+function renderSpoilers() {
+  const q = (document.getElementById('spoilerSearch')?.value||'').toLowerCase();
+  let data = bots.filter(b=>b.status==='spoiler');
+  if(q) data = data.filter(b=>(b.name+' '+(b.plot||'')).toLowerCase().includes(q));
+  const grid = document.getElementById('spoilerGrid');
+  if(!data.length) { grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มี Spoiler ~ </p></div>`; return; }
+  grid.innerHTML = data.map(b=>botCardHTML(b)).join('');
+}
+function renderFavs() {
+  const favBots = bots.filter(b=>favorites.includes(b.id));
+  const grid = document.getElementById('favsGrid');
+  if(!favBots.length) { grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มีรายการโปรด ~ กด  ที่การ์ดบอทได้เลย</p></div>`; return; }
+  grid.innerHTML = favBots.map(b=>botCardHTML(b)).join('');
+}
+
+function botCardHTML(b) {
+  const isFav = favorites.includes(b.id);
+  const badgeMap = { released:'badge-released', spoiler:'badge-spoiler', updated:'badge-updated' };
+  const badgeLabel = { released:'Released', spoiler:'Spoiler', updated:'Updated' };
+  const povClass = { male:'pov-male', female:'pov-female', any:'pov-any' };
+  const povLabel = { male:'Male POV', female:'Female POV', any:'Any POV' };
+  const formattedDate = b.releasedate ? formatDateTH(b.releasedate) : '';
+  let countdown = '';
+  if(b.status==='spoiler' && b.releasedate) {
+    const diff = Math.ceil((new Date(b.releasedate)-new Date())/(1000*60*60*24));
+    countdown = `<div class="spoiler-countdown"> Release in: ${formattedDate}${diff>0?' (อีก '+diff+' วัน)':' (ถึงวันแล้ว!)'}</div>`;
+  }
+  let updateBar = '';
+  if(b.status==='updated') {
+    updateBar = `<div class="card-update-bar"><span class="update-label"> NEW UPDATE</span><span>${b.updatedetail||''}</span>${b.updatedAt?'<span style="margin-left:auto;font-size:0.7rem;">'+new Date(b.updatedAt).toLocaleDateString('th-TH')+'</span>':''}</div>`;
+  }
+  const linksHTML = (b.links||[]).slice(0,10).map(l=>
+    `<a class="card-link-btn" href="${l.url||'#'}" target="_blank">${l.label||l.url}</a>`
+  ).join('');
+  const imgHTML = b.img
+    ? `<div class="card-img"><img src="${b.img}" alt="${b.name}" onerror="this.parentElement.innerHTML='?'"></div>`
+    : `<div class="card-img">-</div>`;
+  return `<div class="bot-card" id="card-${b.id}">
+    <span class="card-badge ${badgeMap[b.status]||'badge-released'}">${badgeLabel[b.status]||'Released'}</span>
+    <button class="fav-btn" onclick="toggleFav('${b.id}')">${isFav?'♥':'♡'}</button>
+    ${imgHTML}
+    ${updateBar}
+    <div class="card-body">
+      <div class="card-name">${b.name}</div>
+      <div class="card-meta">
+        ${b.gender?`<span class="card-meta-item">${b.gender}</span>`:''}
+        ${b.age?`<span class="card-meta-item">${b.age} ปี</span>`:''}
+        ${b.pov?`<span class="card-pov ${povClass[b.pov]||'pov-any'}">${povLabel[b.pov]||b.pov}</span>`:''}
+      </div>
+      ${b.plot?`<div class="card-plot">${b.plot}</div>`:''}
+      ${b.quote?`<div class="card-quote">"${b.quote}"</div>`:''}
+      ${b.date?`<div class="card-date"> ${formatDateTH(b.date)}</div>`:''}
+      ${(b.tags||[]).length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${b.tags.map(t=>`<span class="tag-pill">${t}</span>`).join('')}</div>`:''}
+    </div>
+    ${countdown}
+    ${linksHTML?`<div class="card-links">${linksHTML}</div>`:''}
+    <div class="card-actions">
+      <button class="btn-view" onclick="openDetail('${b.id}')">ดูข้อมูลเต็ม</button>
+      <button class="btn-edit" onclick="requirePin(()=>openBotForm(null,'${b.id}'))"></button>
+      <button class="btn-del" onclick="requirePin(()=>deleteBot('${b.id}'))"></button>
+    </div></div>`;
+}
+
+function toggleFav(id) {
+  if(favorites.includes(id)) favorites = favorites.filter(f=>f!==id);
+  else favorites.push(id);
+  LS.set('ja_favs', favorites);
+  renderBots(); renderSpoilers(); renderFavs();
+}
+
+function formatDateTH(dateStr) {
+  if(!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543}`;
+  } catch { return dateStr; }
+}
+
+//  DETAIL MODAL 
+function openDetail(id) {
+  const b = bots.find(x=>x.id===id);
+  if(!b) return;
+  document.getElementById('detailTitle').textContent = b.name;
+  const povLabel = { male:'Male POV', female:'Female POV', any:'Any POV' };
+  const linksHTML = (b.links||[]).map(l=>`<a class="card-link-btn" href="${l.url||'#'}" target="_blank">${l.label||l.url}</a>`).join('');
+  const imgHTML = b.img ? `<div class="modal-img" style="height:280px;"><img src="${b.img}" alt="${b.name}"></div>` : '';
+  const sections = [
+    [' พล็อตเต็ม', b.fullplot],
+    [' Lore', b.lore],
+    [' Personality', b.personality],
+    [' Greeting', b.greeting],
+  ].filter(s=>s[1]).map(s=>`<div class="detail-section"><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join('');
+  document.getElementById('detailBody').innerHTML = `
+    ${imgHTML}
+    <div class="detail-section">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+        ${b.gender?`<span class="card-meta-item">เพศ: ${b.gender}</span>`:''}
+        ${b.age?`<span class="card-meta-item">อายุ: ${b.age} ปี</span>`:''}
+        ${b.pov?`<span class="card-pov ${b.pov==='male'?'pov-male':b.pov==='female'?'pov-female':'pov-any'}">${povLabel[b.pov]||b.pov}</span>`:''}
+        ${b.date?`<span class="card-meta-item"> ${formatDateTH(b.date)}</span>`:''}
+      </div>
+    </div>
+    ${b.quote?`<div class="detail-section"><div class="card-quote" style="font-size:0.9rem;">"${b.quote}"</div></div>`:''}
+    ${sections}
+    ${(b.tags||[]).length?`<div class="detail-section"><h3> แท็ก</h3><div class="tags-wrap">${b.tags.map(t=>`<span class="tag-pill">${t}</span>`).join('')}</div></div>`:''}
+    ${linksHTML?`<div class="detail-section"><h3> ลิงก์</h3><div style="display:flex;flex-wrap:wrap;gap:6px;">${linksHTML}</div></div>`:''}
+  `;
+  openModal('detailModal');
+}
+
+//  LORA / REMEX 
+function openLoraForm(type, id) {
+  currentLoraType = type;
+  currentLoraId = id||null;
+  document.getElementById('loraFormTitle').textContent = id ? ` แก้ไข ${type==='lora'?'LoRa':'Remex'}` : `+ เพิ่ม ${type==='lora'?'LoRa':'Remex'}`;
+  const list = type==='lora' ? loraItems : remexItems;
+  document.getElementById('lf-name').value = '';
+  document.getElementById('lf-tags').value = '';
+  document.getElementById('lf-desc').value = '';
+  document.getElementById('lf-images-list').innerHTML = '';
+  document.getElementById('lf-copyboxes-list').innerHTML = '';
+  document.getElementById('lf-links-list').innerHTML = '';
+  if(id) {
+    const item = list.find(x=>x.id===id);
+    if(!item) return;
+    document.getElementById('lf-name').value = item.name||'';
+    document.getElementById('lf-tags').value = (item.tags||[]).join(', ');
+    document.getElementById('lf-desc').value = item.desc||'';
+    const imgList = document.getElementById('lf-images-list');
+    (item.images||[]).forEach(u=>{ addSingleField('lf-images-list',10,'URL รูปภาพ'); imgList.lastElementChild.querySelector('input').value=u; });
+    const cbList = document.getElementById('lf-copyboxes-list');
+    (item.copyboxes||[]).forEach(cb=>addCopyBoxField(cb));
+    const llList = document.getElementById('lf-links-list');
+    (item.links||[]).forEach(l=>addLinkField('lf-links-list',5,l));
+  }
+  openModal('loraFormModal');
+}
+function saveLora() {
+  const name = document.getElementById('lf-name').value.trim();
+  if(!name) { showToast(' กรุณาใส่ชื่อ'); return; }
+  const data = {
+    id: currentLoraId || Date.now().toString(),
+    name,
+    tags: document.getElementById('lf-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    desc: document.getElementById('lf-desc').value.trim(),
+    images: readSingleFields('lf-images-list'),
+    copyboxes: readCopyBoxFields(),
+    links: readLinkFields('lf-links-list'),
+    createdAt: currentLoraId ? ((currentLoraType==='lora'?loraItems:remexItems).find(x=>x.id===currentLoraId)?.createdAt||Date.now()) : Date.now()
+  };
+  if(currentLoraType==='lora') {
+    if(currentLoraId) loraItems = loraItems.map(x=>x.id===currentLoraId?data:x);
+    else loraItems.push(data);
+    renderLora();
+  } else {
+    if(currentLoraId) remexItems = remexItems.map(x=>x.id===currentLoraId?data:x);
+    else remexItems.push(data);
+    renderRemex();
+  }
+  closeModal('loraFormModal');
+  cloudSave();
+  showToast(' บันทึกแล้ว');
+}
+function deleteLora(type, id) {
+  if(!confirm('ลบรายการนี้?')) return;
+  if(type==='lora') { loraItems = loraItems.filter(x=>x.id!==id); renderLora(); }
+  else { remexItems = remexItems.filter(x=>x.id!==id); renderRemex(); }
+  cloudSave();
+  showToast(' ลบแล้ว');
+}
+
+function renderLora() {
+  const grid = document.getElementById('loraGrid');
+  if(!loraItems.length) { grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มี LoRa ~ </p></div>`; return; }
+  grid.innerHTML = loraItems.map(item=>loraCardHTML(item,'lora')).join('');
+}
+function renderRemex() {
+  const grid = document.getElementById('remexGrid');
+  if(!remexItems.length) { grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มี Remex ~ </p></div>`; return; }
+  grid.innerHTML = remexItems.map(item=>loraCardHTML(item,'remex')).join('');
+}
+
+function loraCardHTML(item, type) {
+  const cover = item.images && item.images[0] ? `<img src="${item.images[0]}" alt="${item.name}" onerror="this.parentElement.innerHTML='?'">` : '';
+  const tagsHTML = (item.tags||[]).map(t=>`<span class="tag-pill">${t}</span>`).join('');
+  const copyHTML = (item.copyboxes||[]).map((cb,i)=>`
+    <div class="copy-box">
+      <div class="copy-box-head">
+        <span class="copy-box-title">${cb.title||'Prompt'}</span>
+        <button class="copy-btn" onclick="copyText(this,'${btoa(encodeURIComponent(cb.text||''))}')">Copy</button>
+      </div>
+      <div class="copy-text">${(cb.text||'').substring(0,200)}${(cb.text||'').length>200?'...':''}</div>
+    </div>`).join('');
+  const linksHTML = (item.links||[]).length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${item.links.map(l=>`<a class="card-link-btn" href="${l.url||'#'}" target="_blank" style="font-size:0.7rem;">${l.label||l.url}</a>`).join('')}</div>` : '';
+  // Gallery
+  let galleryHTML = '';
+  if(item.images && item.images.length>0) {
+    const gId = 'g'+item.id;
+    const imgs = item.images.map((u,i)=>`<div class="gallery-img"><img src="${u}" alt="" onerror="this.parentElement.innerHTML='?'" style="width:100%;height:100%;object-fit:cover;"></div>`).join('');
+    const dots = item.images.map((_,i)=>`<div class="gallery-dot${i===0?' active':''}" onclick="gallerySlideTo('${gId}',${i})"></div>`).join('');
+    const nav = item.images.length>1 ? `<button class="gallery-btn prev" onclick="gallerySlide('${gId}',-1)"><</button><button class="gallery-btn next" onclick="gallerySlide('${gId}',1)">></button>` : '';
+    galleryHTML = `<div class="gallery-slider" id="${gId}">
+      <div class="gallery-inner">${imgs}</div>
+      ${nav}
+    </div><div class="gallery-dots" id="${gId}-dots">${dots}</div>`;
+  }
+  return `<div class="lora-card">
+    <div class="lora-cover">${cover}</div>
+    <div class="lora-body">
+      <div class="lora-name">${item.name}</div>
+      ${tagsHTML?`<div class="tags-wrap" style="margin-bottom:8px;">${tagsHTML}</div>`:''}
+      ${item.desc?`<div class="lora-desc">${item.desc}</div>`:''}
+      ${galleryHTML}
+      ${copyHTML}
+      ${linksHTML}
+      <div style="display:flex;gap:6px;margin-top:10px;">
+        <button class="btn-edit" onclick="requirePin(()=>openLoraForm('${type}','${item.id}'))"> แก้ไข</button>
+        <button class="btn-del" onclick="requirePin(()=>deleteLora('${type}','${item.id}'))"></button>
+      </div>
+    </div></div>`;
+}
+
+// Gallery logic
+const galleryState = {};
+function gallerySlide(id, dir) {
+  const slider = document.getElementById(id);
+  if(!slider) return;
+  const imgs = slider.querySelectorAll('.gallery-img');
+  if(!galleryState[id]) galleryState[id] = 0;
+  galleryState[id] = (galleryState[id] + dir + imgs.length) % imgs.length;
+  slider.querySelector('.gallery-inner').style.transform = `translateX(-${galleryState[id]*100}%)`;
+  updateGalleryDots(id, imgs.length);
+}
+function gallerySlideTo(id, idx) {
+  const slider = document.getElementById(id);
+  if(!slider) return;
+  const imgs = slider.querySelectorAll('.gallery-img');
+  galleryState[id] = idx;
+  slider.querySelector('.gallery-inner').style.transform = `translateX(-${idx*100}%)`;
+  updateGalleryDots(id, imgs.length);
+}
+function updateGalleryDots(id, len) {
+  const dotsEl = document.getElementById(id+'-dots');
+  if(!dotsEl) return;
+  dotsEl.querySelectorAll('.gallery-dot').forEach((d,i)=>d.classList.toggle('active',i===galleryState[id]));
+}
+
+// Copy text
+function copyText(btn, encoded) {
+  const text = decodeURIComponent(atob(encoded));
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = ' Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(()=>showToast('ไม่สามารถคัดลอกได้'));
+}
+
+//  PROMPTS 
+function openPromptForm(id) {
+  currentPromptId = id||null;
+  document.getElementById('pf-name').value = '';
+  document.getElementById('pf-img').value = '';
+  document.getElementById('pf-tags').value = '';
+  document.getElementById('pf-prompt').value = '';
+  if(id) {
+    const item = promptItems.find(x=>x.id===id);
+    if(!item) return;
+    document.getElementById('promptFormTitle').textContent = ' แก้ไข Prompt';
+    document.getElementById('pf-name').value = item.name||'';
+    document.getElementById('pf-img').value = item.img||'';
+    document.getElementById('pf-tags').value = (item.tags||[]).join(', ');
+    document.getElementById('pf-prompt').value = item.prompt||'';
+  } else {
+    document.getElementById('promptFormTitle').textContent = '+ เพิ่ม Prompt';
+  }
+  openModal('promptFormModal');
+}
+function savePrompt() {
+  const name = document.getElementById('pf-name').value.trim();
+  if(!name) { showToast(' กรุณาใส่ชื่อ'); return; }
+  const data = {
+    id: currentPromptId || Date.now().toString(),
+    name,
+    img: document.getElementById('pf-img').value.trim(),
+    tags: document.getElementById('pf-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    prompt: document.getElementById('pf-prompt').value.trim(),
+    createdAt: currentPromptId ? (promptItems.find(x=>x.id===currentPromptId)?.createdAt||Date.now()) : Date.now()
+  };
+  if(currentPromptId) promptItems = promptItems.map(x=>x.id===currentPromptId?data:x);
+  else promptItems.push(data);
+  renderPrompts();
+  closeModal('promptFormModal');
+  cloudSave();
+  showToast(' บันทึก Prompt แล้ว');
+}
+function deletePrompt(id) {
+  if(!confirm('ลบ Prompt นี้?')) return;
+  promptItems = promptItems.filter(x=>x.id!==id);
+  renderPrompts();
+  cloudSave();
+  showToast(' ลบแล้ว');
+}
+function renderPrompts() {
+  const grid = document.getElementById('promptGrid');
+  if(!promptItems.length) { grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon" style="font-size:2rem;color:var(--text3);">- - -</div><p>ยังไม่มี Prompt ~ </p></div>`; return; }
+  grid.innerHTML = promptItems.map(item=>{
+    const tagsHTML = (item.tags||[]).map(t=>`<span class="tag-pill">${t}</span>`).join('');
+    const encoded = btoa(encodeURIComponent(item.prompt||''));
+    const imgHTML = item.img ? `<img src="${item.img}" alt="${item.name}" onerror="this.parentElement.innerHTML='?'" style="width:100%;height:100%;object-fit:cover;">` : '';
+    return `<div class="prompt-card">
+      <div class="prompt-img">${imgHTML}</div>
+      <div class="prompt-body">
+        <div class="prompt-name">${item.name}</div>
+        ${tagsHTML?`<div class="tags-wrap" style="margin-bottom:8px;">${tagsHTML}</div>`:''}
+        <div class="prompt-text-box" onclick="copyPrompt(this,'${encoded}')">
+          <span>${item.prompt||''}</span>
+          <span class="prompt-copy-hint">กดเพื่อคัดลอก</span>
+          <div class="prompt-copied"> คัดลอกแล้ว!</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;">
+          <button class="btn-edit" onclick="requirePin(()=>openPromptForm('${item.id}'))"></button>
+          <button class="btn-del" onclick="requirePin(()=>deletePrompt('${item.id}'))"></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function copyPrompt(el, encoded) {
+  const text = decodeURIComponent(atob(encoded));
+  navigator.clipboard.writeText(text).then(()=>{
+    el.querySelector('.prompt-copied').style.display='flex';
+    setTimeout(()=>el.querySelector('.prompt-copied').style.display='none', 1500);
+    showToast(' คัดลอก Prompt แล้ว!');
+  }).catch(()=>showToast('ไม่สามารถคัดลอกได้'));
+}
+
+//  INIT 
+cloudLoad();
+</script></body></html>
